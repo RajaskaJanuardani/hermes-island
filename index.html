@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Island</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="island-wrapper">
+    <div id="island" class="island collapsed boot">
+      <!-- CONCAVE NOTCH EARS (Shown in Poni / Notch theme) -->
+      <svg class="notch-ear left" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+        <path d="M0 0 H14 V14 A14 14 0 0 0 0 0 Z" fill="#0b0c10" />
+      </svg>
+      <svg class="notch-ear right" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+        <path d="M0 0 H14 A14 14 0 0 0 0 14 V0 Z" fill="#0b0c10" />
+      </svg>
+
+      <div class="island-clip">
+      <div class="glass-sheen"></div>
+
+      <!-- LAUNCH BANNER (iOS call-style glass bubble shown when app opens) -->
+      <div class="banner-content" id="bannerContent">
+        <div class="banner-avatar jg-avatar"></div>
+        <div class="banner-text">
+          <div class="banner-title" id="bannerAiName">Hancow</div>
+          <div class="banner-sub" id="bannerSubText">Agent otonom siap membantu</div>
+        </div>
+        <button class="banner-btn music" id="bannerMusicBtn" title="Musik">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+        </button>
+        <button class="banner-btn ask" id="bannerAskBtn" title="Buka Agent">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+        </button>
+      </div>
+
+      <!-- SYSTEM & WHATSAPP NOTIFICATION / INCOMING CALL HUD -->
+      <div class="notif-content" id="notifContent">
+        <div class="notif-main-row">
+          <div class="notif-icon-wrap" id="notifIconWrap">
+            <img id="notifLogoImg" class="notif-logo-img hidden" src="" alt="" draggable="false" />
+            <svg id="notifSvgMsg" class="notif-fallback-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <svg id="notifSvgCall" class="notif-fallback-svg hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+
+          <div class="notif-text" id="notifTextArea">
+            <div class="notif-meta-row">
+              <span class="notif-app-tag" id="notifAppTag">WHATSAPP</span>
+              <span class="notif-call-badge hidden" id="notifCallBadge">PANGGILAN MASUK</span>
+            </div>
+            <div class="notif-title" id="notifTitle">Notifikasi Baru</div>
+            <div class="notif-body" id="notifBody">Ketuk untuk membuka aplikasi</div>
+          </div>
+
+          <div class="notif-actions">
+            <button class="notif-btn reply" id="notifReplyBtn" type="button" title="Balas Pesan">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 17 4 12 9 7"></polyline>
+                <path d="M20 18v-2a4 4 0 0 0-4-4H4"></path>
+              </svg>
+            </button>
+
+            <button class="notif-btn open" id="notifOpenBtn" type="button" title="Buka Aplikasi">
+              <svg id="notifOpenIconMsg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+              <svg id="notifOpenIconCall" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+              </svg>
+            </button>
+
+            <button class="notif-btn dismiss" id="notifDismissBtn" type="button" title="Tutup">
+              <svg id="notifDismissIconClose" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              <svg id="notifDismissIconHangup" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <form class="notif-reply-row hidden" id="notifReplyForm">
+          <input
+            type="text"
+            id="notifReplyInput"
+            class="notif-reply-input"
+            placeholder="Balas pesan..."
+            autocomplete="off"
+          />
+          <button type="submit" class="notif-reply-send" id="notifReplySendBtn" title="Kirim Balasan">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- VOLUME & BRIGHTNESS OSD HUD -->
+      <div class="osd-content" id="osdContent">
+        <button class="osd-icon-btn" id="osdIconBtn" type="button" title="Mute / Unmute">
+          <svg id="osdIconVol" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+            <path id="osdVolWave1" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path id="osdVolWave2" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="osdIconMute" class="hidden" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+          <svg id="osdIconBright" class="hidden" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+        </button>
+
+        <div class="osd-bar-wrap">
+          <div class="osd-track" id="osdTrack">
+            <div class="osd-fill" id="osdFill" style="width: 64%"></div>
+          </div>
+        </div>
+
+        <span class="osd-val" id="osdVal">64%</span>
+      </div>
+
+      <!-- COLLAPSED PILL / NOTCH VIEW -->
+      <div class="collapsed-content" id="collapsedContent">
+        <div class="collapsed-pill-row" id="collapsedPillRow">
+          <div class="collapsed-left">
+            <div class="mini-avatar-badge" id="miniAvatarBadge" title="Agent Aktif">
+              <img id="miniAvatarImg" src="public/assets/hancow-idle-poster.png" alt="" draggable="false" />
+              <span class="mini-avatar-ring" id="miniAvatarRing"></span>
+            </div>
+            <span id="clockText" class="clock-text">13:27</span>
+          </div>
+
+          <div id="liveTimerPill" class="live-timer-pill hidden" title="Focus Timer Aktif">
+            <span class="live-timer-dot"></span>
+            <span id="liveTimerText">25:00</span>
+          </div>
+
+          <div id="miniMediaWave" class="mini-waveform hidden" title="Now Playing">
+            <span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="collapsed-right">
+            <svg id="batteryBoltIcon" class="battery-bolt hidden" viewBox="0 0 24 24" width="11" height="11" fill="currentColor" title="Mengisi Daya">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span id="batteryText" class="battery-text">100%</span>
+            <div class="battery-icon" id="batteryIcon">
+              <div class="battery-body">
+                <div id="batteryFill" class="battery-fill" style="width: 100%"></div>
+              </div>
+              <div class="battery-cap"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PONI / NOTCH LIVE LYRICS VIEW -->
+        <div class="notch-lyric-row hidden" id="notchLyricRow">
+          <svg class="notch-music-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3" fill="currentColor"></circle>
+            <circle cx="18" cy="16" r="3" fill="currentColor"></circle>
+          </svg>
+          <div class="notch-lyric-text-wrap">
+            <span id="notchLyricText" class="notch-lyric-text">Belum ada lirik</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK COMMAND / PUSH-TO-TALK BAR (Alt + Space) -->
+      <div class="quick-cmd-content" id="quickCmdContent">
+        <img class="quick-cmd-avatar" id="quickCmdAvatar" src="public/assets/hancow-idle-poster.png" alt="" draggable="false" />
+        <form class="quick-cmd-form" id="quickCmdForm">
+          <input type="text" id="quickCmdInput" class="quick-cmd-input" placeholder="Perintah cepat ke Hancow... (Enter = kirim, Esc = tutup)" autocomplete="off" />
+          <button type="button" class="quick-cmd-mic" id="btnQuickVoice" title="Bicara (Push-to-Talk)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </button>
+          <button type="submit" class="quick-cmd-send" id="btnQuickSend" title="Eksekusi">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- SMART LIVE TOAST (Thermal Alert / Timer Done / Quick Answer) -->
+      <div class="live-toast-content" id="liveToastContent">
+        <img class="live-toast-avatar" id="liveToastAvatar" src="public/assets/hancow-idle-poster.png" alt="" draggable="false" />
+        <div class="live-toast-body">
+          <div class="live-toast-tag" id="liveToastTag">LIVE ACTIVITY</div>
+          <div class="live-toast-title" id="liveToastTitle">Hancow</div>
+          <div class="live-toast-sub" id="liveToastSub">Siap membantu</div>
+        </div>
+        <button type="button" class="mini-btn primary hidden" id="btnLiveToastAction">Buka</button>
+        <button type="button" class="notif-btn dismiss" id="btnLiveToastClose" title="Tutup">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- CHARGER & PERIPHERAL DEVICE CONNECTION HUD (Charger, Mouse, Earphone, Keyboard, USB) -->
+      <div class="hw-hud-content" id="hwHudContent">
+        <div class="hw-hud-icon-wrap" id="hwHudIconBox"></div>
+        <div class="hw-hud-info">
+          <div class="hw-hud-tag" id="hwHudTag">PENGISIAN DAYA</div>
+          <div class="hw-hud-title" id="hwHudTitle">Charger Terhubung</div>
+          <div class="hw-hud-bar-wrap" id="hwHudBarWrap">
+            <div class="hw-hud-bar-fill" id="hwHudBarFill" style="width: 80%"></div>
+          </div>
+          <div class="hw-hud-sub hidden" id="hwHudSub">Siap digunakan</div>
+        </div>
+        <div class="hw-hud-badge" id="hwHudBadge">100%</div>
+      </div>
+
+      <!-- EXPANDED VIEW -->
+      <div class="expanded-content" id="expandedContent">
+        <!-- TAB 1: MEDIA PLAYER -->
+        <div class="tab-panel active" id="tab-media">
+          <div class="media-player-col">
+            <div class="media-top">
+              <div class="album-art-wrap" id="albumArtWrap">
+                <img id="albumArt" class="album-art" src="" alt="Album Cover" />
+              </div>
+
+              <div class="media-meta">
+                <div class="media-label-row">
+                  <span class="media-tag" id="mediaTag">SPOTIFY</span>
+                </div>
+                <div class="media-title" id="mediaTitle">Belum ada musik</div>
+                <div class="media-artist" id="mediaArtist">Putar lagu di Spotify / Browser</div>
+              </div>
+
+              <div class="waveform-box" id="waveformBox">
+                <div class="waveform" id="waveformBars">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="media-progress-row">
+              <span class="time-label" id="timeCurrent">0:00</span>
+              <div class="progress-track" id="progressTrack" title="Klik atau geser untuk loncat durasi">
+                <div class="progress-fill" id="progressFill" style="width: 0%">
+                  <div class="progress-thumb"></div>
+                </div>
+              </div>
+              <span class="time-label" id="timeRemaining">-0:00</span>
+            </div>
+
+            <div class="media-controls">
+              <button class="ctrl-btn sub-ctrl" id="btnShuffle" title="Shuffle (Acak)">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 3 21 3 21 8"></polyline>
+                  <line x1="4" y1="20" x2="21" y2="3"></line>
+                  <polyline points="21 16 21 21 16 21"></polyline>
+                  <line x1="15" y1="15" x2="21" y2="21"></line>
+                  <line x1="4" y1="4" x2="9" y2="9"></line>
+                </svg>
+                <span class="active-dot"></span>
+              </button>
+
+              <button class="ctrl-btn" id="btnPrev" title="Previous">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>
+                </svg>
+              </button>
+
+              <button class="ctrl-btn play-pause" id="btnPlayPause" title="Play / Pause">
+                <svg id="iconPause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+                <svg id="iconPlay" class="hidden" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+
+              <button class="ctrl-btn" id="btnNext" title="Next">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>
+                </svg>
+              </button>
+
+              <button class="ctrl-btn sub-ctrl" id="btnRepeat" title="Repeat (Ulangi)">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+                <span id="repeatOneBadge" class="repeat-one-badge hidden">1</span>
+                <span class="active-dot"></span>
+              </button>
+
+              <button class="ctrl-btn sub-ctrl" id="btnLyrics" title="Lihat / Tutup Lirik">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  <line x1="8" y1="8" x2="16" y2="8"></line>
+                  <line x1="8" y1="12" x2="13" y2="12"></line>
+                </svg>
+                <span class="active-dot"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="lyrics-panel hidden" id="lyricsPanel">
+            <div class="lyrics-header">
+              <span class="lyrics-badge">LIRIK LAGU</span>
+              <button class="lyrics-close-btn" id="btnCloseLyrics" type="button" title="Tutup Lirik">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                <span>Tutup</span>
+              </button>
+            </div>
+            <div class="lyrics-body" id="lyricsBody">
+              <div class="lyrics-empty">Putar lagu untuk menampilkan lirik</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: SYSTEM STATS -->
+        <div class="tab-panel" id="tab-system">
+          <div class="sys-header">
+            <span class="media-tag">SYSTEM MONITOR</span>
+            <span class="sys-uptime" id="sysUptime">Uptime 0.0h</span>
+          </div>
+
+          <div class="sys-metrics">
+            <div class="sys-card">
+              <div class="sys-card-top">
+                <span class="sys-name">CPU Load</span>
+                <span class="sys-val" id="cpuVal">12%</span>
+              </div>
+              <div class="sys-bar-bg">
+                <div class="sys-bar-fill cpu-fill" id="cpuBar" style="width: 12%"></div>
+              </div>
+              <div class="sys-sub" id="cpuSub">Processor Aktif</div>
+            </div>
+
+            <div class="sys-card">
+              <div class="sys-card-top">
+                <span class="sys-name">RAM Usage</span>
+                <span class="sys-val" id="ramVal">48%</span>
+              </div>
+              <div class="sys-bar-bg">
+                <div class="sys-bar-fill ram-fill" id="ramBar" style="width: 48%"></div>
+              </div>
+              <div class="sys-sub" id="ramSub">7.8 / 16 GB</div>
+            </div>
+
+            <div class="sys-card">
+              <div class="sys-card-top">
+                <span class="sys-name">Suhu CPU</span>
+                <span class="sys-val" id="cpuTempVal">--°C</span>
+              </div>
+              <div class="sys-bar-bg">
+                <div class="sys-bar-fill cpu-temp-fill" id="cpuTempBar" style="width: 45%"></div>
+              </div>
+              <div class="sys-sub" id="cpuTempSub">Sensor Termal CPU</div>
+            </div>
+
+            <div class="sys-card">
+              <div class="sys-card-top">
+                <span class="sys-name">Suhu GPU</span>
+                <span class="sys-val" id="gpuTempVal">--°C</span>
+              </div>
+              <div class="sys-bar-bg">
+                <div class="sys-bar-fill gpu-temp-fill" id="gpuTempBar" style="width: 42%"></div>
+              </div>
+              <div class="sys-sub" id="gpuTempSub">Load 0% · GPU</div>
+            </div>
+          </div>
+
+          <!-- ACER SENSE POWER MODE -->
+          <div class="sys-mode-block">
+            <div class="sys-mode-head">
+              <span class="sys-mode-label" id="powerModeLabel">Power Mode</span>
+              <button type="button" class="sys-mode-help" id="btnPowerModeHelp" title="Atur batas daya CPU & kecepatan kipas pendingin laptop">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="sys-mode-pills" id="powerModePills">
+              <button type="button" class="sys-mode-pill" data-power="silent">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                  <path d="M12 6v6l3 2"></path>
+                  <path d="M18 4a2.5 2.5 0 0 0-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 18 4z"></path>
+                </svg>
+                <span>Silent</span>
+              </button>
+              <button type="button" class="sys-mode-pill active" data-power="balanced">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                  <line x1="12" y1="12" x2="12" y2="6"></line>
+                  <circle cx="12" cy="12" r="1.8" fill="currentColor"></circle>
+                </svg>
+                <span>Balanced</span>
+              </button>
+              <button type="button" class="sys-mode-pill" data-power="performance">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                  <line x1="12" y1="12" x2="16" y2="8"></line>
+                  <circle cx="12" cy="12" r="1.8" fill="currentColor"></circle>
+                </svg>
+                <span>Performance</span>
+              </button>
+            </div>
+            <div class="sys-mode-sub" id="powerModeSub">Untuk produktivitas harian seperti aplikasi kantor.</div>
+          </div>
+
+          <!-- ACER SENSE VISUAL ADJUSTMENT -->
+          <div class="sys-mode-block">
+            <div class="sys-mode-head">
+              <span class="sys-mode-label" id="visualModeLabel">Visual Adjustment</span>
+            </div>
+            <div class="sys-mode-pills visual" id="visualModePills">
+              <button type="button" class="sys-mode-pill active" data-visual="standard">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                  <line x1="6" y1="8" x2="18" y2="8"></line>
+                  <line x1="6" y1="12" x2="18" y2="12"></line>
+                  <circle cx="9" cy="8" r="1.2" fill="currentColor"></circle>
+                  <circle cx="15" cy="12" r="1.2" fill="currentColor"></circle>
+                </svg>
+                <span>Standard</span>
+              </button>
+              <button type="button" class="sys-mode-pill" data-visual="photo">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="15" height="15" rx="2"></rect>
+                  <path d="M7 21h12a2 2 0 0 0 2-2V7"></path>
+                  <circle cx="8" cy="8" r="1.5"></circle>
+                  <polyline points="15 13 11 9 4 16"></polyline>
+                </svg>
+                <span>Photo</span>
+              </button>
+              <button type="button" class="sys-mode-pill" data-visual="movie">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <line x1="2" y1="8" x2="22" y2="8"></line>
+                  <polygon points="10 11 15 14 10 17 10 11" fill="currentColor"></polygon>
+                </svg>
+                <span>Movie</span>
+              </button>
+              <button type="button" class="sys-mode-pill" data-visual="reading">
+                <svg class="sys-mode-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  <line x1="12" y1="6" x2="16" y2="6"></line>
+                  <line x1="12" y1="10" x2="16" y2="10"></line>
+                </svg>
+                <span>Reading</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: FULL-ACCESS MULTI-AGENT HUB -->
+        <div class="tab-panel" id="tab-hermes">
+          <!-- Drag & Drop Glass Overlay -->
+          <div class="drop-overlay hidden" id="dropOverlay">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Lepas file atau gambar ke Agent</span>
+          </div>
+
+          <!-- Inline Confirmation Modal (Clear Chat / Delete Session) -->
+          <div class="island-confirm-backdrop hidden" id="islandConfirmModal">
+            <div class="island-confirm-card">
+              <div class="island-confirm-title" id="confirmModalTitle">Bersihkan riwayat chat?</div>
+              <div class="island-confirm-desc" id="confirmModalDesc">Pesan pada sesi ini akan dikosongkan. Memori agent dan riwayat sesi lain tetap tersimpan.</div>
+              <div class="island-confirm-actions">
+                <button type="button" class="mini-btn ghost" id="btnConfirmCancel">Batal</button>
+                <button type="button" class="mini-btn primary" id="btnConfirmOk">Ya, Bersihkan</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Muse AI Activity Detail Split Inspector Modal -->
+          <div class="act-modal-backdrop hidden" id="activityDetailModal">
+            <div class="act-modal-card">
+              <div class="act-modal-header">
+                <div class="act-modal-header-left">
+                  <span class="act-modal-status-pill" id="actModalStatusBadge">
+                    <span class="act-modal-status-dot" id="actModalStatusDot"></span>
+                    <span id="actModalStatusText">Selesai</span>
+                  </span>
+                  <div class="act-modal-title-wrap">
+                    <div class="act-modal-title" id="actModalTitle">Detail Aktivitas</div>
+                    <div class="act-modal-meta" id="actModalMeta">Hancow · Hari ini</div>
+                  </div>
+                </div>
+                <button type="button" class="act-modal-close" id="btnCloseActModal" title="Tutup Detail Aktivitas">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="act-modal-split">
+                <!-- Left Column: Connected Vertical Timeline -->
+                <div class="act-timeline-col" id="actTimelineList"></div>
+
+                <!-- Right Column: Step / Summary Inspector -->
+                <div class="act-detail-col" id="actDetailPane"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Header: Active Agent + Quick Actions -->
+          <div class="hermes-header">
+            <div class="hermes-brand">
+              <div class="hermes-avatar jg-avatar"></div>
+              <div class="hermes-id">
+                <div class="hermes-name-row">
+                  <span class="hermes-name" id="hermesAiName">Hancow</span>
+                </div>
+                <div class="hermes-status">
+                  <span class="hermes-dot"></span>
+                  <span id="jgStatusText">autonomous · claude-fable-5</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hermes-top-actions">
+              <button type="button" class="icon-pill-btn" id="btnNewChat" title="Chat Baru (New Chat)">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                </svg>
+              </button>
+              <button type="button" class="icon-pill-btn" id="btnChatSessions" title="Pilih & Kelola Riwayat Chat">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                  <path d="M12 7v5l4 2"></path>
+                </svg>
+              </button>
+              <button type="button" class="icon-pill-btn" id="btnProactiveScan" title="Cek Proaktif Laptop & Konektor Sekarang">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </button>
+              <button type="button" class="icon-pill-btn" id="btnPinIsland" title="Kunci Panel Tetap Terbuka">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="17" x2="12" y2="22"></line>
+                  <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+                </svg>
+              </button>
+              <button type="button" class="hermes-clear-btn" id="hermesClearBtn" title="Bersihkan Isi Sesi Chat Ini">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Agent Dropdown Selector (Avatar + Name Grid) -->
+          <div class="agent-switcher-row">
+            <div class="agent-select" id="agentSelect">
+              <button type="button" class="agent-select-trigger" id="agentSelectTrigger" title="Pilih Agent">
+                <img class="agent-select-thumb" id="agentSelectThumb" src="public/assets/hancow-idle-poster.png" alt="" draggable="false" />
+                <span class="agent-select-name" id="agentSelectName">Hancow</span>
+                <span class="agent-select-busy hidden" id="agentSelectBusy"></span>
+                <svg class="agent-select-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <div class="agent-select-menu hidden" id="agentSelectMenu">
+                <div class="agent-select-grid" id="agentPillsBar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-View Navigation: Chat | Aktivitas | Cronjob -->
+          <div class="agent-subnav" id="agentSubNav">
+            <button type="button" class="subnav-btn active" data-subview="chat">Chat</button>
+            <button type="button" class="subnav-btn" data-subview="activity">Aktivitas</button>
+            <button type="button" class="subnav-btn" data-subview="cron">Cronjob</button>
+          </div>
+
+          <!-- SUBVIEW 1: CHAT + TERMINAL/FOLDER TOOLS + UPLOAD/DRAG/PASTE -->
+          <div class="agent-subview active" id="subview-chat">
+            <!-- Saved Chat Sessions Picker Drawer -->
+            <div class="sessions-drawer hidden" id="sessionHistoryDrawer">
+              <div class="sessions-drawer-head">
+                <span class="sessions-drawer-title" id="sessionsDrawerTitle">Riwayat Chat</span>
+                <div class="studio-btn-group">
+                  <button type="button" class="mini-btn primary" id="btnDrawerNewChat">+ Chat Baru</button>
+                  <button type="button" class="mini-btn ghost" id="btnCloseSessionsDrawer">Tutup</button>
+                </div>
+              </div>
+              <div class="sessions-list" id="sessionsListContainer"></div>
+            </div>
+
+            <div class="hermes-messages" id="hermesMessages">
+              <div class="hermes-welcome" id="hermesWelcome">
+                <div class="welcome-avatar jg-avatar"></div>
+                <div class="welcome-title" id="welcomeTitleText">Hancow siap akses penuh laptopmu</div>
+                <div class="welcome-role-sub" id="welcomeRoleSub">Terminal · Folder Manager · Skill · Konektor · Cronjob</div>
+                <div class="welcome-chips">
+                  <button type="button" class="chip" data-prompt="Cek kondisi laptopku sekarang (CPU, RAM, Baterai, Disk C:) dan isi folder Downloads terbaru">
+                    <svg class="chip-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <span>Cek Laptop & Downloads</span>
+                  </button>
+                  <button type="button" class="chip" data-prompt="Cek daftar chat WhatsApp terbaru dan notifikasi GitHub saya">
+                    <svg class="chip-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>WA & GitHub</span>
+                  </button>
+                  <button type="button" class="chip" data-prompt="Cek ruang tugas BSI MyBest yang tersedia dan yang sudah selesai">
+                    <svg class="chip-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>Tugas BSI</span>
+                  </button>
+                  <button type="button" class="chip" data-prompt="Buatkan cronjob setiap 2 jam untuk mengecek kesehatan RAM/Disk laptop dan tugas baru">
+                    <svg class="chip-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>Buat Cronjob</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Staged Attachments Preview Bar -->
+            <div class="attachment-strip hidden" id="attachmentStrip"></div>
+
+            <!-- Chat Form with File Upload + Paste + Drag support -->
+            <form class="hermes-input-row" id="hermesForm">
+              <input type="file" id="hermesFileInput" class="hidden" multiple />
+              <button type="button" class="hermes-attach-btn" id="btnAttachFile" title="Upload File / Gambar (atau Drag & Paste Ctrl+V)">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                </svg>
+              </button>
+              <input
+                type="text"
+                id="hermesInput"
+                class="hermes-input"
+                placeholder="Perintahkan Hancow... (Paste / Drag file didukung)"
+                autocomplete="off"
+              />
+              <button type="submit" class="hermes-send-btn" id="hermesSendBtn" title="Kirim">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- SUBVIEW 5: CRONJOBS & PROACTIVE AUTOMATION -->
+          <div class="agent-subview" id="subview-cron">
+            <div class="panel-toolbar">
+              <button type="button" class="autostart-toggle active" id="btnProactiveToggle" role="switch" aria-checked="true" title="Agent aktif memberi info laptop & konektor secara otomatis">
+                <span class="autostart-track"><span class="autostart-thumb"></span></span>
+                <span class="autostart-label">Info Proaktif Otomatis</span>
+              </button>
+              <button type="button" class="mini-btn primary" id="btnToggleNewCron">+ Buat Jadwal</button>
+            </div>
+
+            <div class="conn-filter-bar" id="cronScopeBar">
+              <button type="button" class="conn-filter-tab active" data-scope="agent" id="cronTabCurrentAgent">Milik Agent Ini</button>
+              <button type="button" class="conn-filter-tab" data-scope="all" id="cronTabAllAgents">Semua Agent</button>
+            </div>
+
+            <div class="new-cron-box hidden" id="newCronBox">
+              <div class="studio-top-grid">
+                <input type="text" id="newCronName" class="studio-input compact" placeholder="Nama jadwal (misal: Cek Email & Tugas)" />
+                <input type="text" id="newCronSchedule" class="studio-input compact" placeholder="every 30m / daily 08:00 / 0 9 * * *" value="every 30m" />
+              </div>
+              <div class="studio-top-grid">
+                <select id="newCronAgent" class="studio-select compact"></select>
+                <button type="button" class="mini-btn primary" id="btnSaveNewCron">Tambah Cronjob</button>
+              </div>
+              <textarea id="newCronPrompt" class="studio-textarea compact" rows="2" placeholder="Instruksi otomatis untuk AI saat jadwal berjalan..."></textarea>
+            </div>
+
+            <div class="list-scroll" id="cronListContainer"></div>
+          </div>
+
+          <!-- SUBVIEW 6: MUSE AI ACTIVITY LOG FEED -->
+          <div class="agent-subview" id="subview-activity">
+            <div class="panel-toolbar">
+              <div class="conn-filter-bar" id="activityScopeBar" style="border-bottom: none; padding-bottom: 0;">
+                <button type="button" class="conn-filter-tab active" data-scope="agent" id="actTabCurrentAgent">Milik Agent Ini</button>
+                <button type="button" class="conn-filter-tab" data-scope="all" id="actTabAllAgents">Semua Agent</button>
+              </div>
+              <div class="studio-btn-group">
+                <input type="text" id="activitySearchInput" class="studio-input compact" style="width: 150px;" placeholder="Cari log aktivitas..." />
+                <button type="button" class="mini-btn ghost" id="btnClearActivities" title="Bersihkan Log Aktivitas Agent Ini">Bersihkan</button>
+              </div>
+            </div>
+
+            <div class="list-scroll muse-activity-feed" id="activityListContainer"></div>
+          </div>
+        </div>
+
+        <!-- TAB 4: SETTINGS (Tampilan | Provider | Kelola Agent) -->
+        <div class="tab-panel" id="tab-settings">
+          <div class="settings-nav" id="settingsNav">
+            <button type="button" class="settings-nav-btn active" data-section="appearance">Tampilan</button>
+            <button type="button" class="settings-nav-btn" data-section="provider">Provider</button>
+            <button type="button" class="settings-nav-btn" data-section="agents">Kelola Agent</button>
+          </div>
+
+          <!-- SECTION 1: TAMPILAN -->
+          <div class="settings-section active" id="settings-appearance">
+            <div class="settings-scroll">
+            <div class="settings-header">
+              <span class="media-tag">TAMPILAN & SISTEM</span>
+              <button type="button" class="autostart-toggle active" id="btnAutoStart" role="switch" aria-checked="true" title="Jalankan otomatis saat Windows menyala">
+                <span class="autostart-track"><span class="autostart-thumb"></span></span>
+                <span class="autostart-label">Auto-start</span>
+              </button>
+            </div>
+
+            <div class="theme-grid">
+              <button type="button" class="theme-card active" data-theme="island" id="themeCardIsland">
+                <div class="theme-preview island-prev">
+                  <div class="prev-island-pill">
+                    <span class="prev-clock">13:27</span>
+                    <span class="prev-bat"></span>
+                  </div>
+                </div>
+                <div class="theme-card-info">
+                  <div class="theme-card-title-row">
+                    <span class="theme-card-name">Dynamic Island</span>
+                    <span class="theme-check">
+                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                  </div>
+                  <span class="theme-card-desc">Mengambang · Liquid Glass</span>
+                </div>
+              </button>
+
+              <button type="button" class="theme-card" data-theme="notch" id="themeCardNotch">
+                <div class="theme-preview notch-prev">
+                  <div class="prev-notch-shape">
+                    <svg class="prev-note" viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3" fill="currentColor"></circle><circle cx="18" cy="16" r="3" fill="currentColor"></circle></svg>
+                    <span class="prev-lyric-line"></span>
+                  </div>
+                </div>
+                <div class="theme-card-info">
+                  <div class="theme-card-title-row">
+                    <span class="theme-card-name">Poni (Notch)</span>
+                    <span class="theme-check">
+                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                  </div>
+                  <span class="theme-card-desc" id="themeNotchDesc">Menempel Atas · Live Lirik</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="lang-switch-row">
+              <span class="media-tag" id="langLabelTag">BAHASA / LANGUAGE</span>
+              <div class="lang-pill-group">
+                <button type="button" class="lang-pill-btn active" id="btnLangId" data-lang="id">Indonesia</button>
+                <button type="button" class="lang-pill-btn" id="btnLangEn" data-lang="en">English</button>
+              </div>
+            </div>
+
+            <div class="ai-toggle-card">
+              <div class="ai-toggle-info">
+                <div class="ai-toggle-title-row">
+                  <span class="ai-toggle-title" id="aiToggleTitle">Fitur AI & Avatar Animasi</span>
+                  <span class="ai-toggle-badge" id="aiToggleBadge">Multi-Agent</span>
+                </div>
+                <span class="ai-toggle-desc" id="aiToggleDesc">Aktifkan karakter avatar dan bot AI. Matikan untuk Mode Lite (hemat ~120 MB RAM).</span>
+              </div>
+              <button type="button" class="autostart-toggle active" id="btnAiToggle" role="switch" aria-checked="true" title="Nyalakan/matikan fitur AI untuk menghemat RAM">
+                <span class="autostart-track"><span class="autostart-thumb"></span></span>
+                <span class="autostart-label" id="aiToggleLabel">Aktif</span>
+              </button>
+            </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: PROVIDER (AI GATEWAY & MODEL) -->
+          <div class="settings-section" id="settings-provider">
+            <div class="settings-scroll">
+            <!-- AI GATEWAY & MODEL CONFIGURATION -->
+            <div class="settings-gateway-card">
+              <div class="settings-section-head">
+                <span class="media-tag">AI GATEWAY & MODEL</span>
+                <span class="gw-status-pill" id="gwStatusBadge">Default: 9router</span>
+              </div>
+
+              <div class="studio-top-grid">
+                <div class="studio-field">
+                  <label>Provider Gateway</label>
+                  <select id="gwProviderSelect" class="studio-select compact">
+                    <option value="9router">9router (Default)</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="groq">Groq Cloud</option>
+                    <option value="openrouter">OpenRouter</option>
+                    <option value="ollama">Ollama (Local)</option>
+                    <option value="gemini">Google Gemini</option>
+                    <option value="custom">Custom URL</option>
+                  </select>
+                </div>
+                <div class="studio-field">
+                  <label>Model Aktif</label>
+                  <div class="studio-avatar-row">
+                    <input type="text" id="gwModelInput" list="gwModelDatalist" class="studio-input compact" value="claude-fable-5" placeholder="claude-fable-5" />
+                    <datalist id="gwModelDatalist"></datalist>
+                    <button type="button" class="mini-btn" id="btnFetchModels" title="Muat daftar model dari gateway">List</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="studio-field">
+                <label>Base URL Endpoint (/v1)</label>
+                <input type="text" id="gwBaseUrlInput" class="studio-input compact" value="http://127.0.0.1:20128/v1" placeholder="http://127.0.0.1:20128/v1" />
+              </div>
+
+              <div class="studio-field">
+                <label>API Key</label>
+                <div class="studio-avatar-row">
+                  <input type="password" id="gwApiKeyInput" class="studio-input compact" placeholder="sk-..." autocomplete="off" />
+                  <button type="button" class="mini-btn" id="btnToggleGwKey">Lihat</button>
+                </div>
+              </div>
+
+              <div class="studio-footer">
+                <span class="studio-status" id="gwTestResultText"></span>
+                <div class="studio-btn-group">
+                  <button type="button" class="mini-btn" id="btnTestGateway">Tes Koneksi</button>
+                  <button type="button" class="mini-btn primary" id="btnSaveGateway">Simpan Gateway</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: KELOLA AGENT (List, Skill, Konektor, Konfigurasi, Create) -->
+          <div class="settings-section" id="settings-agents">
+            <div class="manage-toolbar">
+              <div class="conn-filter-bar manage-subnav" id="manageSubNav">
+                <button type="button" class="conn-filter-tab active" data-pane="list">Agent</button>
+                <button type="button" class="conn-filter-tab" data-pane="skills">Skill</button>
+                <button type="button" class="conn-filter-tab" data-pane="connectors">Konektor</button>
+              </div>
+              <button type="button" class="mini-btn primary" id="btnCreateAgentOpen">+ Buat Agent</button>
+            </div>
+
+            <div class="settings-pane active" id="pane-agentlist">
+              <div class="list-scroll" id="manageAgentList"></div>
+            </div>
+
+            <!-- SUBVIEW 2: AGENT CONFIGURATION (Instruksi, Memori, soul.md, identity.md) -->
+          <div class="settings-pane" id="subview-config">
+            <div class="manage-back-row">
+              <button type="button" class="mini-btn ghost" id="btnBackToAgentList">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Daftar Agent
+              </button>
+              <span class="manage-back-title" id="cfgPaneTitle">Konfigurasi Agent</span>
+            </div>
+            <div class="studio-scroll">
+              <div class="studio-top-grid">
+                <div class="studio-field">
+                  <label>Nama Agent</label>
+                  <input type="text" id="cfgAgentName" class="studio-input" placeholder="Misal: Muse / Cue" maxlength="28" />
+                </div>
+                <div class="studio-field">
+                  <label>Avatar</label>
+                  <div class="studio-avatar-row">
+                    <select id="cfgAgentAvatar" class="studio-select">
+                      <option value="hancow">Hancow (Metal)</option>
+                      <option value="wana">Wana (Pink)</option>
+                      <option value="pipo">Winnie (Hijau)</option>
+                      <option value="lab">Lab (Scientist)</option>
+                      <option value="ninja">Ninja (Stealth)</option>
+                      <option value="hoodie">Hoodie (Hacker)</option>
+                      <option value="wizard">Wizard (Magic)</option>
+                      <option value="astro">Astro (Cosmic)</option>
+                      <option value="cowboy">Cowboy (Western)</option>
+                      <option value="hero">Hero (Super)</option>
+                      <option value="custom">Custom File</option>
+                    </select>
+                    <input type="file" id="cfgCustomAvatarInput" class="hidden" accept=".png,.jpg,.jpeg,.webp,.gif,.webm,.mp4" />
+                    <button type="button" class="mini-btn" id="btnUploadAvatar" title="Pilih File Avatar">Pilih</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="studio-field">
+                <label>Peran / Spesialisasi</label>
+                <input type="text" id="cfgAgentRole" class="studio-input" placeholder="Misal: Research & Automation Bot" maxlength="80" />
+              </div>
+
+              <!-- 4 Required Markdown Tabs + Global Memory -->
+              <div class="doc-tabs" id="cfgDocTabs">
+                <button type="button" class="doc-tab active" data-doc="instructions">1. Instruksi</button>
+                <button type="button" class="doc-tab" data-doc="memory">2. Memori Agent</button>
+                <button type="button" class="doc-tab" data-doc="soul">3. soul.md</button>
+                <button type="button" class="doc-tab" data-doc="identity">4. identity.md</button>
+                <button type="button" class="doc-tab" data-doc="globalMemory">Memori Utama</button>
+              </div>
+
+              <textarea id="cfgDocEditor" class="studio-textarea" rows="6" spellcheck="false" placeholder="Tulis konfigurasi agent di sini..."></textarea>
+
+              <div class="studio-footer">
+                <span class="studio-status" id="cfgStatusText"></span>
+                <div class="studio-btn-group">
+                  <button type="button" class="mini-btn danger hidden" id="btnDeleteAgent">Hapus Agent</button>
+                  <button type="button" class="mini-btn primary" id="btnSaveAgent">Simpan Agent</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBVIEW 3: SKILLS MANAGER -->
+          <div class="settings-pane" id="subview-skills">
+            <div class="panel-toolbar">
+              <input type="text" id="skillSearchInput" class="studio-input compact" placeholder="Cari skill (google, notion, github, design, antislop...)" />
+              <button type="button" class="mini-btn" id="btnToggleNewSkill">+ Skill</button>
+            </div>
+
+            <div class="new-skill-box hidden" id="newSkillBox">
+              <input type="text" id="newSkillName" class="studio-input compact" placeholder="Nama skill (misal: deploy-check)" />
+              <input type="text" id="newSkillDesc" class="studio-input compact" placeholder="Deskripsi singkat skill" />
+              <textarea id="newSkillContent" class="studio-textarea compact" rows="3" placeholder="Instruksi langkah-langkah SKILL.md..."></textarea>
+              <div class="studio-btn-group right">
+                <button type="button" class="mini-btn primary" id="btnCreateSkillSave">Simpan Skill</button>
+              </div>
+            </div>
+
+            <div class="list-scroll" id="skillsListContainer"></div>
+          </div>
+
+          <!-- SUBVIEW 4: CONNECTORS / PLUGINS -->
+          <div class="settings-pane" id="subview-connectors">
+            <div class="conn-toolbar">
+              <input type="text" id="connSearchInput" class="studio-input compact" placeholder="Cari dari 40 konektor aplikasi..." />
+              <div class="conn-filter-bar" id="connFilterBar">
+                <button type="button" class="conn-filter-tab active" data-cat="all">Semua</button>
+                <button type="button" class="conn-filter-tab" data-cat="connected">Siap</button>
+                <button type="button" class="conn-filter-tab" data-cat="pesan">Pesan</button>
+                <button type="button" class="conn-filter-tab" data-cat="workspace">Workspace</button>
+                <button type="button" class="conn-filter-tab" data-cat="produktivitas">Kerja</button>
+                <button type="button" class="conn-filter-tab" data-cat="dev">Dev</button>
+                <button type="button" class="conn-filter-tab" data-cat="media">Media</button>
+              </div>
+            </div>
+            <div class="list-scroll" id="connectorsListContainer"></div>
+          </div>
+          </div>
+
+          <!-- CREATE AGENT MODAL -->
+          <div class="ca-backdrop hidden" id="createAgentModal">
+            <div class="ca-card">
+              <button type="button" class="ca-close" id="btnCloseCreateAgent" title="Tutup">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+              <div class="ca-avatar-wrap">
+                <div class="ca-avatar" id="caAvatarPreview"></div>
+                <button type="button" class="ca-edit-btn" id="btnCaEditAvatar" title="Ubah Avatar">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                </button>
+              </div>
+              <div class="ca-title">Buat Agent</div>
+              <label class="ca-label" for="caAgentName">Nama Agent</label>
+              <input type="text" class="ca-input" id="caAgentName" placeholder="Beri nama agent kamu" maxlength="28" autocomplete="off" />
+              <div class="ca-actions">
+                <button type="button" class="ca-btn ghost" id="btnCaCancel">Batal</button>
+                <button type="button" class="ca-btn primary" id="btnCaCreate" disabled>Buat</button>
+              </div>
+
+              <div class="ca-picker hidden" id="caAvatarPicker">
+                <div class="ca-picker-head">
+                  <span>Pilih Avatar</span>
+                  <button type="button" class="ca-icon-btn" id="btnCaRandom" title="Acak Avatar">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                  </button>
+                </div>
+                <div class="ca-preset-grid" id="caFaceGrid"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: SMART HUB (Drop Tray · Clipboard AI · Focus Timer) -->
+        <div class="tab-panel" id="tab-hub">
+          <div class="settings-nav" id="hubNav">
+            <button type="button" class="settings-nav-btn active" data-hub="tray">Drop Tray</button>
+            <button type="button" class="settings-nav-btn" data-hub="clipboard">Clipboard AI</button>
+            <button type="button" class="settings-nav-btn" data-hub="focus">Focus Timer</button>
+          </div>
+
+          <!-- HUB 1: SMART DROP TRAY (File Shelf) -->
+          <div class="settings-section active" id="hub-tray">
+            <div class="hub-top-bar">
+              <span class="hub-hint" id="trayHintText">Drag file ke pulau untuk transit, atau drag keluar ke WA/Browser</span>
+              <div class="studio-btn-group">
+                <input type="file" id="trayFileInput" class="hidden" multiple />
+                <button type="button" class="mini-btn" id="btnTrayAddFile">+ File</button>
+                <button type="button" class="mini-btn ghost" id="btnTrayClear">Bersihkan</button>
+              </div>
+            </div>
+            <div class="tray-dropzone" id="trayDropZone">
+              <div class="tray-dz-icon" id="trayDzIcon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </div>
+              <div class="tray-dz-text">
+                <div class="tray-dz-title" id="trayDzTitle">Zona Magnet Drop Tray</div>
+                <div class="tray-dz-sub" id="trayDzSub">Seret & lepas file/gambar ke sini, atau klik untuk memilih file</div>
+              </div>
+            </div>
+            <div class="list-scroll" id="trayListContainer"></div>
+          </div>
+
+          <!-- HUB 2: SMART CLIPBOARD HISTORY + INSTANT AI -->
+          <div class="settings-section" id="hub-clipboard">
+            <div class="hub-top-bar">
+              <input type="text" id="clipSearchInput" class="studio-input compact" placeholder="Cari riwayat Ctrl+C..." />
+              <button type="button" class="mini-btn ghost" id="btnClipClear">Bersihkan</button>
+            </div>
+            <div class="hub-ai-status hidden" id="clipAiStatus">Memproses dengan AI...</div>
+            <div class="list-scroll" id="clipListContainer"></div>
+          </div>
+
+          <!-- HUB 3: FOCUS / POMODORO LIVE TIMER -->
+          <div class="settings-section" id="hub-focus">
+            <div class="focus-widget">
+              <div class="focus-dial-col">
+                <div class="focus-dial">
+                  <svg class="focus-dial-svg" viewBox="0 0 120 120">
+                    <defs>
+                      <linearGradient id="focusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4ade80" />
+                        <stop offset="100%" stop-color="#38bdf8" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="focus-dial-track" cx="60" cy="60" r="52" />
+                    <circle class="focus-dial-prog" id="focusRingCircle" cx="60" cy="60" r="52" />
+                  </svg>
+                  <div class="focus-dial-center">
+                    <img class="focus-dial-avatar" id="focusAvatarImg" src="public/assets/hancow-idle-poster.png" alt="" draggable="false" />
+                    <div class="focus-time-big" id="focusTimeBig">25:00</div>
+                    <span class="focus-badge-pill" id="focusBadgeText">POMODORO</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="focus-ctrl-col">
+                <div class="focus-ctrl-head">
+                  <span class="media-tag">LIVE FOCUS SESSION</span>
+                  <span class="focus-state-sub" id="focusStateSub">Siap mulai</span>
+                </div>
+
+                <input type="text" id="focusTaskInput" class="studio-input compact" placeholder="Apa target fokus lu sekarang?" maxlength="48" />
+
+                <div class="focus-presets">
+                  <button type="button" class="focus-pill-btn focus-preset-btn" data-mins="15" data-label="SPRINT">15m</button>
+                  <button type="button" class="focus-pill-btn focus-preset-btn active" data-mins="25" data-label="POMODORO">25m</button>
+                  <button type="button" class="focus-pill-btn focus-preset-btn" data-mins="45" data-label="DEEP WORK">45m</button>
+                  <button type="button" class="focus-pill-btn focus-preset-btn" data-mins="5" data-label="REHAT">5m Rehat</button>
+                  <button type="button" class="focus-pill-btn" id="btnFocusPlus5" title="Tambah 5 menit">+5m</button>
+                </div>
+
+                <div class="focus-actions">
+                  <button type="button" class="focus-start-btn" id="btnFocusStartPause">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                    <span>Mulai Fokus</span>
+                  </button>
+                  <button type="button" class="focus-reset-btn" id="btnFocusReset" title="Reset Timer">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- iOS SEGMENTED CONTROL (Icon-only) -->
+        <div class="mode-switcher" id="modeSwitcher">
+          <span class="seg-indicator" id="segIndicator"></span>
+          <button class="mode-dot active" data-target="tab-media" title="Musik" aria-label="Musik">
+            <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+          </button>
+          <button class="mode-dot" data-target="tab-system" title="Sistem" aria-label="Sistem">
+            <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </button>
+          <button class="mode-dot" data-target="tab-hermes" title="Multi-Agent AI" aria-label="Multi-Agent AI">
+            <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+              <path d="M20 3v4"></path>
+              <path d="M22 5h-4"></path>
+            </svg>
+          </button>
+          <button class="mode-dot" data-target="tab-hub" title="Smart Hub (Drop Tray · Clipboard · Focus)" aria-label="Smart Hub">
+            <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </button>
+          <button class="mode-dot" data-target="tab-settings" title="Setelan & Gateway" aria-label="Setelan & Gateway">
+            <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="avatar-video.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
